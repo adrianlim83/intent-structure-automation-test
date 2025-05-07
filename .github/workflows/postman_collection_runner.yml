@@ -43,5 +43,5 @@ jobs:
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
-          name: newman-html-report
-          path: ${{ github.workspace }}/QA_Test_Cases_Report.html
+          name: QA_Test_Cases_Report
+          path: ${{ github.workspace }}/QA_Test_Cases_Report_${{ steps.date.outputs.value }}.html
