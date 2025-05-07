@@ -40,7 +40,7 @@ jobs:
               sed -i `${{ vars.INTENT_API_KEY }}/********/g' ${{ github.workspace }}/QA_Test_Cases_Report.html
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: newman-html-report
           path: ${{ github.workspace }}/QA_Test_Cases_Report.html
