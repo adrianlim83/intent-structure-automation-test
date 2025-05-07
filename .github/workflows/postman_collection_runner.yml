@@ -44,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: QA_Test_Cases_Report
-          path: ${{ github.workspace }}/QA_Test_Cases_Report_${{ steps.date.outputs.value }}.html
+          path: ${{ github.workspace }}/QA_Test_Cases_Report.html
