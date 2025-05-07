@@ -36,8 +36,9 @@ jobs:
 
       - name: Sanitize HTML report (replace GitHub secrets with ****)
         run: |
-            # Replace sensitive information in the HTML report
-              sed -i `${{ secrets.INTENT_API_KEY }}/********/g' ${{ github.workspace }}/QA_Test_Cases_Report.html
+          sed -i "s/${INTENT_API_KEY}/********/g" "$GITHUB_WORKSPACE/QA_Test_Cases_Report.html"
+        env:
+          - INTENT_API_KEY: ${{ secrets.INTENT_API_KEY }}
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
