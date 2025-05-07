@@ -34,10 +34,8 @@ jobs:
             --iteration-data ${{ github.workspace }}/test/data/QA_Test_Cases.csv \
             -r htmlextra \
             --reporter-htmlextra-export ${{ github.workspace }}/QA_Test_Cases_Report.html
-          exit_code=$?
-          # Use GITHUB_ENV for cross-step variable
-          echo "exit_code=$exit_code" >> $GITHUB_ENV
-        continue-on-error: true # This lets us still continue after test failure
+          # Save exit code to GITHUB_ENV for later steps
+          echo "exit_code=$?" >> $GITHUB_ENV
 
       - name: Sanitize HTML report (replace GitHub secrets with ****)
         run: |
@@ -52,7 +50,7 @@ jobs:
           path: ${{ github.workspace }}/QA_Test_Cases_Report.html
 
       - name: Validate Postman Content Structure Automation Test Outcome
-        if: env.exit_code != '0'
+        if: env.exit_code != '0' # Check the captured exit code
         run: |
           echo "Postman tests failed with exit code ${{ env.exit_code }}"
-          exit 1  # Force failure if the exit code is not 0
+          exit 1
