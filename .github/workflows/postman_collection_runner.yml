@@ -29,7 +29,7 @@ jobs:
           # Pass GitHub environment variables to Postman using --env-var
           newman run ${{ github.workspace }}/postman/IntentStructureAutomationTestPostmanCollection.json \
             --env-var "knowledgeHubUrl=${{ vars.KNOWLEDGE_HUB_URL }}" \
-            --env-var "intentApiKey=${{ vars.INTENT_API_KEY }}" \
+            --env-var "intentApiKey=${{ secrets.INTENT_API_KEY }}" \
             --iteration-data ${{ github.workspace }}/test/data/QA_Test_Cases.csv \
             -r htmlextra \
             --reporter-htmlextra-export ${{ github.workspace }}/QA_Test_Cases_Report.html
@@ -37,7 +37,7 @@ jobs:
       - name: Sanitize HTML report (replace GitHub secrets with ****)
         run: |
             # Replace sensitive information in the HTML report
-              sed -i `${{ vars.INTENT_API_KEY }}/********/g' ${{ github.workspace }}/QA_Test_Cases_Report.html
+              sed -i `${{ secrets.INTENT_API_KEY }}/********/g' ${{ github.workspace }}/QA_Test_Cases_Report.html
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
