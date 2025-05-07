@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "8db05e46-b4cf-46cc-ab04-3da888eee83b",
+		"name": "Intent Structure (Automation Test)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20100025",
+		"_collection_link": "https://blue-firefly-479265.postman.co/workspace/My-Workspace~4b5a743f-2d50-45d9-885b-b55ede880338/collection/20100025-8db05e46-b4cf-46cc-ab04-3da888eee83b?action=share&source=collection_link&creator=20100025"
+	},
+	"item": [
+		{
+			"name": "Validate Intent Structure",
+			"item": [
+				{
+					"name": "Test Script",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"// Extract intents from response\r",
+									"const actualIntents = responseJson.data;\r",
+									"\r",
+									"// Ensure the first item has the expected \"intent\" value\r",
+									"const actualIntent = actualIntents.length > 0 ? actualIntents[0] : {intent: \"Unknown\"};\r",
+									"\r",
+									"// Retrieve test input values from the iteration data file (CSV or JSON input)\r",
+									"const question = pm.iterationData.get(\"question\");\r",
+									"const expectedIntent = pm.iterationData.get(\"expected_intent\");\r",
+									"\r",
+									"// Validate the response against the expected intent\r",
+									"pm.test(`Given a question = \"${question}\"\\nWhen the system processes the question and returns an actual intent\\nThen the actual intent should equal the expected intent = \"${expectedIntent}\"`, function () {\r",
+									"        // Ensure intents contains a data array with exactly one item\r",
+									"        pm.expect(actualIntents, `Expected 1 intent, but got ${actualIntents.length}`).to.be.an(\"array\").with.lengthOf(1);\r",
+									"\r",
+									"        // Compare actual vs expected intent and include both in failure message\r",
+									"        pm.expect(actualIntent.intent, `Expected intent to be \"${expectedIntent}\", but got \"${actualIntent.intent}\"`)\r",
+									"            .to.eql(expectedIntent);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{intentApiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"queryVector\": \"{{question}}\",\n    \"topk\": 1,\n    \"includeScore\": true,\n    \"acceptableVectorSearchScore\": 0.8\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{knowledgeHubUrl}}/intent/knowledge/structure/vector/search",
+							"host": [
+								"{{knowledgeHubUrl}}"
+							],
+							"path": [
+								"intent",
+								"knowledge",
+								"structure",
+								"vector",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

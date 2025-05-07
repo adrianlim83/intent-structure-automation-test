@@ -1,0 +1,5 @@
+question,expected_intent
+"hello",Greeting
+"thank you",Acknowledgment
+"How can I balance screen time with other activities for my toddler?",Query
+"I have a question!",AskPreamble
