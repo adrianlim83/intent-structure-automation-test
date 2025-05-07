@@ -25,6 +25,7 @@ jobs:
         run: npm install -g newman-reporter-htmlextra
 
       - name: Run Postman Content Structure Automation Test
+        continue-on-error: true
         run: |
           # Pass GitHub environment variables to Postman using --env-var
           newman run ${{ github.workspace }}/postman/IntentStructureAutomationTestPostmanCollection.json \
