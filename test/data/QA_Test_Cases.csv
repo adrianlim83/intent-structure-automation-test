@@ -1,5 +1,10 @@
-question,expected_intent
-"hello",Greeting
-"thank you",Acknowledgment
-"How can I balance screen time with other activities for my toddler?",Query
-"I have a question!",AskPreamble
+question,expected_intent,behavior
+"Hi",Greeting,"Basic Greeting: Tests recognition of a single, common greeting keyword"
+"Good morning",Greeting,"Formal Greeting with Time Context: Ensures formal and time-based greetings are classified correctly"
+"Helo",Greeting,"Misspelled Greeting: Tests robustness to typos or misspellings"
+"Hello, hope you're doing well!",SocialGreeting,"Polite Greeting with Well-Wishing: Tests well-wishing recognition in a greeting context"
+"Hey there! How's it going?",SocialGreeting,"Extended Friendly Greeting: Checks if casual and extended greetings are matched correctly"
+"Hi! Long time no see!",SocialGreeting,"Familiar Tone: Tests recognition of socially contextual greetings with past interaction reference"
+"Good evening! How have you been?",SocialGreeting,"Formal yet Personal: Ensures recognition of time-based and caring social greetings"
+"Hey! Just wanted to say hi and check in",SocialGreeting,"Light Check-in: Captures social greetings with relational tone but no direct question"
+"Heyy there! How's it going?",SocialGreeting,"Typo Variant: Tests if casual social greeting with repeated character typo is still matched correctly"
