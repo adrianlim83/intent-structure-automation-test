@@ -25,7 +25,6 @@ jobs:
         run: npm install -g newman-reporter-htmlextra
 
       - name: Run Postman Content Structure Automation Test
-        continue-on-error: true
         run: |
           # Pass GitHub environment variables to Postman using --env-var
           newman run ${{ github.workspace }}/postman/IntentStructureAutomationTestPostmanCollection.json \
@@ -34,6 +33,8 @@ jobs:
             --iteration-data ${{ github.workspace }}/test/data/QA_Test_Cases.csv \
             -r htmlextra \
             --reporter-htmlextra-export ${{ github.workspace }}/QA_Test_Cases_Report.html
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        continue-on-error: true
 
       - name: Sanitize HTML report (replace GitHub secrets with ****)
         run: |
@@ -46,3 +47,7 @@ jobs:
         with:
           name: QA_Test_Cases_Report
           path: ${{ github.workspace }}/QA_Test_Cases_Report.html
+
+      - name: Validate Postman Content Structure Automation Test Outcome
+        if: steps.newman-test.outputs.exit_code != '0'
+        run: exit 1
