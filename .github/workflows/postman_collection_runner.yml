@@ -25,6 +25,7 @@ jobs:
         run: npm install -g newman-reporter-htmlextra
 
       - name: Run Postman Content Structure Automation Test
+        id: postman-content-structure-automation-test
         run: |
           # Pass GitHub environment variables to Postman using --env-var
           newman run ${{ github.workspace }}/postman/IntentStructureAutomationTestPostmanCollection.json \
@@ -49,5 +50,5 @@ jobs:
           path: ${{ github.workspace }}/QA_Test_Cases_Report.html
 
       - name: Validate Postman Content Structure Automation Test Outcome
-        if: steps.newman-test.outputs.exit_code != '0'
+        if: steps.postman-content-structure-automation-test.outputs.exit_code != '0'
         run: exit 1
