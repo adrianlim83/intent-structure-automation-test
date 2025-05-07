@@ -25,7 +25,6 @@ jobs:
         run: npm install -g newman-reporter-htmlextra
 
       - name: Run Postman Content Structure Automation Test
-        id: postman-content-structure-automation-test
         run: |
           # Pass GitHub environment variables to Postman using --env-var
           newman run ${{ github.workspace }}/postman/IntentStructureAutomationTestPostmanCollection.json \
@@ -34,23 +33,17 @@ jobs:
             --iteration-data ${{ github.workspace }}/test/data/QA_Test_Cases.csv \
             -r htmlextra \
             --reporter-htmlextra-export ${{ github.workspace }}/QA_Test_Cases_Report.html
-          # Save exit code to GITHUB_ENV for later steps
-          echo "exit_code=$?" >> $GITHUB_ENV
 
       - name: Sanitize HTML report (replace GitHub secrets with ****)
+        if: always()
         run: |
           sed -i "s/${INTENT_API_KEY}/********/g" "$GITHUB_WORKSPACE/QA_Test_Cases_Report.html"
         env:
           INTENT_API_KEY: ${{ secrets.INTENT_API_KEY }}
 
       - name: Upload HTML report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: QA_Test_Cases_Report
           path: ${{ github.workspace }}/QA_Test_Cases_Report.html
-
-      - name: Validate Postman Content Structure Automation Test Outcome
-        if: env.exit_code != '0' # Check the captured exit code
-        run: |
-          echo "Postman tests failed with exit code ${{ env.exit_code }}"
-          exit 1
